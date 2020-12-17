@@ -1,0 +1,265 @@
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a routerLink="/dashboard" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    
+    <!-- SEARCH FORM -->
+    <form class="form-inline ml-3" style="width: 50%;">
+      <div class="input-group w-100 input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" />
+        <div class="input-group-append">
+          <button class="btn btn-navbar"   (click)="search()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="assets/images/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="assets/images/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="assets/images/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
+            class="fas fa-th-large"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Name : {{name}}</h1>
+            <h5>Number : {{contactNumber}}</h5>
+            <h5>Address : {{address}}</h5>
+          </div><!-- /.col -->
+         
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+    
+        <!-- Main row -->
+        <div class="row">
+          <!-- Left col -->
+          <div class="col-md-12">
+            <!-- MAP & BOX PANE -->
+            
+            <!-- /.row -->
+
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="card">
+              <div class="card-header border-transparent">
+                <h3 class="card-title">Latest Orders</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table m-0">
+                    <thead>
+                    <tr>
+                      <th>Payment Id</th>
+                      <th>Payment Date</th>
+                      <th>Paid Amount </th>
+                      <th>Custom Billing Id</th>
+                      <th>Way Of Payment</th>
+                      <th>Payment Info</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngFor='let paymentDetail of paymentDetails'>
+                    <tr >
+                      <td>{{paymentDetail.paymentDetailId}} </td>
+                     
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then modifyDate else showDate"></div>
+                     
+                      <ng-template #modifyDate>
+                      <td><input type="date"  [ngModel]="paymentDetail.paymentDate | date:'yyyy-MM-dd'" (ngModelChange)="paymentDetail.paymentDate = $event" /></td>
+                      </ng-template>
+
+                      <ng-template #showDate>
+                      <td><input type="date" disabled [ngModel]="paymentDetail.paymentDate | date:'yyyy-MM-dd'" (ngModelChange)="paymentDetail.paymentDate = $event" /></td>
+                      </ng-template>
+
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then modifyPaidAmount else showPaidAmount"></div>
+                      <ng-template #showPaidAmount><td>{{paymentDetail.paidAmount}}</td></ng-template> 
+                      <ng-template #modifyPaidAmount><td><input type="text"  [(ngModel)]="paymentDetail.paidAmount"/></td></ng-template> 
+
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then modifyCustomBillingId else showCustomBillingId"></div>
+                      <ng-template #showCustomBillingId><td>{{paymentDetail.customBillingId}}</td></ng-template> 
+                      <ng-template #modifyCustomBillingId><td><input type="text"  [(ngModel)]="paymentDetail.customBillingId"/></td></ng-template> 
+
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then modifyWayOfPaym else showWayOfPaym"></div>
+                      <!-- <ng-template #showWayOfPaym><td>{{paymentDetail.wayOfPayment}}</td></ng-template> 
+                      <ng-template #modifyWayOfPaym><td><input type="text"  [(ngModel)]="paymentDetail.wayOfPayment"/></td></ng-template>  -->
+
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then modifyPaymentInfo else showPaymentInfo"></div>
+                      <ng-template #showPaymentInfo><td>{{paymentDetail.paymentInfo}}</td></ng-template> 
+                      <ng-template #modifyPaymentInfo><td><input type="text"  [(ngModel)]="paymentDetail.paymentInfo"/></td></ng-template> 
+
+                      <ng-template #modifyWayOfPaym>
+                      <td>
+                      <select [(ngModel)]="paymentDetail.wayOfPayment" >
+                        <option *ngFor="let opt of paymentOption" [ngValue]="opt">{{opt}}</option>
+                      </select>
+                      </td>
+                      </ng-template>
+
+                      <ng-template #showWayOfPaym>
+                        <td>
+                          
+                        <select [(ngModel)]="paymentDetail.wayOfPayment" disabled>
+                          <option *ngFor="let opt of paymentOption" [ngValue]="opt">{{opt}}</option>
+                        </select>
+                        </td>
+                        </ng-template>
+
+                      <div *ngIf="paymentDetail.paymentDetailId==currentId;then saveBtn else editBtn"></div>
+                      <ng-template #editBtn><td><button (click)="modify(paymentDetail, '0')">edit</button></td></ng-template>
+                      <ng-template #saveBtn><td><button (click)="modify(paymentDetail, '1')">save</button></td></ng-template>
+                  
+                          <td>
+                            <button type="button" class="btn btn-tool" (click) = "deleteBill(paymentDetail)" >
+                              <i class="fas fa-times"></i>
+                            </button>
+                          </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer clearfix">
+                <button class="btn btn-sm btn-info float-left" (click)="addNewRow()">Place New Order</button>
+                <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+
+         
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
