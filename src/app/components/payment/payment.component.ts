@@ -26,26 +26,27 @@ export class PaymentComponent implements OnInit {
   name:string="";
   contactNumber:string="";
   address:string="";
-  clientId:string=""
+  
   paymentOption=["NEFT","Cheque","Cash","Online"]
   searchText:string="";
 
+
+  clientId:any=null;
+  billingId:any=null;
+
   ngOnInit(): void {
-    this.clientId = this.billingService.getClientId();
+    
+    this.clientId=this.route.snapshot.paramMap.get('cId');
     this.name=this.billingService.getClientName();
     this.contactNumber=this.billingService.getClientPhoneNumber();
     this.address=this.billingService.getClientAddress();
     
-  
-    if(this.clientId==""){
-      this.router.navigateByUrl("/dashboard");
-    }else{
-      if(this.name==""){
-        this.loadData();
-      }
-      let billingId=this.route.snapshot.paramMap.get('id');
-      this.loadPaymentDetail(this.clientId,billingId);
+    if(this.name==""){
+      this.loadData();
     }
+    this.billingId=this.route.snapshot.paramMap.get('id');
+    
+    this.loadPaymentDetail(this.clientId,this.billingId);
   }
 
   loadData(){
@@ -89,7 +90,10 @@ export class PaymentComponent implements OnInit {
         paymentDetail.paymentDate=payDate;
 
         this.paymentService.savePaymentDetail(paymentDetail).subscribe(
-          data=>console.log(data)
+          data=>{
+            let obj = this.paymentDetails.find(c=>c.paymentDetailId=="0");
+            obj!.paymentDetailId=data.paymentDetailId;
+          }
         )
         this.currentId="-1";
       }else{
@@ -109,8 +113,16 @@ export class PaymentComponent implements OnInit {
   }
 
   search(){
-    console.log("Consolde")
-    console.log(this.searchText);
+    if(this.searchText==""){
+      this.loadPaymentDetail(this.clientId,this.billingId);
+    }
+    else{
+      this.paymentService.searchPaymentDetail(this.searchText).subscribe(
+        data=>{this.paymentDetails=data
+        }
+      );
+    }
+   
   }
 
 }

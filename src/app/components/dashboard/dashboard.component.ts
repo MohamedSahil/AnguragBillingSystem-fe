@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit {
     this.billingService.setClientAddress(client.address!);
     this.billingService.setClientId(client.id!);
 
-    console.log(this.billingService.getClientName());
     this.route.navigateByUrl("billing-detail/"+client.id);
   }
 

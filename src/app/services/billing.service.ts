@@ -11,7 +11,7 @@ export class BillingService {
   listBillsUrl="http://localhost:8080/listBillingDetail";
   saveBillUrl="http://localhost:8080/updateBillingDetail";
   createBillUrl="http://localhost:8080/addBillingDetail";
-
+  searchBillUrl="http://localhost:8080/searchBills"
   
   
   
@@ -34,6 +34,11 @@ export class BillingService {
   saveBillingList(billingDto:BillingDto){
     return this.httpClient.post<Billing>(this.saveBillUrl,billingDto);
   }
+  searchBills(query:any){
+    return this.httpClient.get<Billing[]>(this.searchBillUrl+"?query="+query);
+  }
+
+
   setClientName(name:string){
     this.clientName=name;
   }

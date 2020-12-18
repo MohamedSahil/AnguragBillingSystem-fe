@@ -19,7 +19,7 @@ const routes : Routes = [
   {path:'login',component:LoginComponent},
   {path:'dashboard',component:DashboardComponent},
   {path:'billing-detail/:id',component:BillingComponent},
-  {path:'payment-detail/:id',component:PaymentComponent},
+  {path:'payment-detail/:cId/:id',component:PaymentComponent},
   {path:'',redirectTo:'dashboard',pathMatch:'full'}
 ]
 

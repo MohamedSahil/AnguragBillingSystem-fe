@@ -26,15 +26,18 @@ export class BillingComponent implements OnInit {
   contactNumber:string="";
   address:string="";
   searchText:string="";
+  clientId:any=null;
 
   ngOnInit(){
 
     this.name=this.billingService.getClientName();
     this.contactNumber=this.billingService.getClientPhoneNumber();
     this.address=this.billingService.getClientAddress();
+    this.clientId=this.route.snapshot.paramMap.get('id');
     if(this.name==""){
       this.loadData();
     }
+    
     this.showBillingList()
     this.showUpdatedMsg=true;
     
@@ -46,8 +49,7 @@ export class BillingComponent implements OnInit {
               {}
 
   loadData(){
-    let tempId=this.route.snapshot.paramMap.get('id');
-    this.clientService.getClient(tempId).subscribe(
+    this.clientService.getClient(this.clientId).subscribe(
       data=>{
         this.name=data.name!;
         this.contactNumber=data.contactNumber!;
@@ -74,7 +76,7 @@ export class BillingComponent implements OnInit {
     this.billingService.getBillingList(billingId).subscribe(
       (data)=>{
         this.billingDetails=data;
-        console.log(this.billingDetails);
+        //console.log(this.billingDetails);
       }
       
     );
@@ -104,7 +106,8 @@ export class BillingComponent implements OnInit {
 
         this.billingService.createBill(billingDto).subscribe(
           (data)=>{
-            console.log(data);
+            let obj = this.billingDetails.find(c=>c.billingId=="0");
+            obj!.billingId=data.billingId;
             //window.location.reload();
           }
         );
@@ -137,12 +140,22 @@ export class BillingComponent implements OnInit {
   public routeToPaymentPage(billingDetail:any){
     let clientId=this.route.snapshot.paramMap.get('id');
     this.billingService.setClientId(clientId!);
-    this.router.navigateByUrl("/payment-detail/"+billingDetail.billingId);
+    console.log(this.clientId);
+    let link = "/payment-detail/"+ this.clientId +"/" +billingDetail.billingId;
+    this.router.navigateByUrl(link);
   }
 
   search(){
     console.log("Consolde")
-    console.log(this.searchText);
+    if(this.searchText==""){
+      this.showBillingList();
+    }
+    else{
+      this.billingService.searchBills(this.searchText).subscribe(
+        data=>this.billingDetails=data
+      );
+    }
+
   }
 
 }
