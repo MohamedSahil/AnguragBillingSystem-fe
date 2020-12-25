@@ -7,6 +7,7 @@ import { Billing } from 'src/app/common/billing';
 import { BillingDto } from 'src/app/dto/billing-dto';
 import { DatePipe } from '@angular/common';
 import {ClientService} from 'src/app/services/client.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 //import {DatepickerOptions,DateModel} from 'ng2-datepicker';
 
 @Component({
@@ -28,6 +29,13 @@ export class BillingComponent implements OnInit {
   searchText:string="";
   clientId:any=null;
 
+  pageSize=2;  
+  page = 1;
+  currentPage=1;
+  totalPageElement=0;
+
+
+
   ngOnInit(){
 
     this.name=this.billingService.getClientName();
@@ -37,23 +45,28 @@ export class BillingComponent implements OnInit {
     if(this.name==""){
       this.loadData();
     }
-    
+
+    this.calcTotalBills();
     this.showBillingList()
+
     this.showUpdatedMsg=true;
     
   }
   constructor(private route:ActivatedRoute,
               private billingService:BillingService,
               private clientService:ClientService,
+              private spinnerService: NgxSpinnerService,  
               private router:Router) 
               {}
 
   loadData(){
+    this.spinnerService.show();
     this.clientService.getClient(this.clientId).subscribe(
       data=>{
         this.name=data.name!;
         this.contactNumber=data.contactNumber!;
         this.address=data.address!;
+        this.spinnerService.hide();
       }
     );
 
@@ -62,23 +75,37 @@ export class BillingComponent implements OnInit {
   public deleteBill(billingDetail:Billing){
     var tempBill=this.billingDetails;
     if(confirm("Are you sure to delete this bill ? ")) {
-      this.billingDetails.slice
-      console.log("Implement delete functionality here");
+      
+      this.spinnerService.show();
+      this.billingService.deleteBill(billingDetail.billingId).subscribe(
+        () => {
+          const index = this.billingDetails.indexOf(billingDetail, 0);
+          this.billingDetails.splice(index);
+          this.spinnerService.hide();
+        }
+      );
     }else{
       this.billingDetails=tempBill;
     }
+  }
+
+  calcTotalBills(){
+    this.billingService.calcTotalBill(this.clientId).subscribe(
+      data=>this.totalPageElement=data.row
+    );
   }
 
   public showBillingList(){
     let tempId=this.route.snapshot.paramMap.get('id');
     // get the "id" param string. convert string to a number using the "+" sys
     const billingId: number =  +tempId!;
-    this.billingService.getBillingList(billingId).subscribe(
+    this.spinnerService.show();
+    this.billingService.getBillingList(billingId,this.page-1).subscribe(
       (data)=>{
         this.billingDetails=data;
         //console.log(this.billingDetails);
-      }
-      
+        this.spinnerService.hide(); 
+      }  
     );
   }
 
@@ -92,8 +119,7 @@ export class BillingComponent implements OnInit {
       this.currentId="";
       billingDetail.billingAmount=+billingDetail.billingAmount!;
       let billingDto:BillingDto = new BillingDto();
-
-      
+  
       billingDto.billingAmount=billingDetail.billingAmount;
       billingDto.billingDate=billingDate;
 
@@ -104,17 +130,23 @@ export class BillingComponent implements OnInit {
         let tempId=this.route.snapshot.paramMap.get('id');
         billingDto.clientId=tempId!;
 
+        this.spinnerService.show();
         this.billingService.createBill(billingDto).subscribe(
           (data)=>{
             let obj = this.billingDetails.find(c=>c.billingId=="0");
             obj!.billingId=data.billingId;
             //window.location.reload();
+            this.spinnerService.hide();
           }
         );
       }else{
         billingDto.billingId=billingDetail.billingId;
+        this.spinnerService.show();
         this.billingService.saveBillingList(billingDto).subscribe(
-          data=>{console.log(data);this.showUpdatedMsg=true;}
+          data=>{
+            console.log(data);
+            this.spinnerService.hide();
+          }
         );
       }
 
@@ -148,14 +180,28 @@ export class BillingComponent implements OnInit {
   search(){
     console.log("Consolde")
     if(this.searchText==""){
+      this.calcTotalBills();
       this.showBillingList();
     }
     else{
-      this.billingService.searchBills(this.searchText).subscribe(
-        data=>this.billingDetails=data
+      this.spinnerService.show();
+      this.billingService.calcTotalSearchElements(this.clientId,this.searchText).subscribe(
+        data=>this.totalPageElement=data.row
+      )
+
+      this.billingService.searchBills(this.clientId,this.searchText,this.page-1).subscribe(
+        data=>{
+          this.billingDetails=data
+          this.spinnerService.hide();
+        }
       );
     }
-
   }
 
+  onChangePage() {
+    if(this.searchText=="")
+      this.showBillingList();
+    else
+      this.search();
+  }
 }

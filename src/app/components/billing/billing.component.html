@@ -18,7 +18,7 @@
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3" style="width: 50%;">
       <div class="input-group w-100 input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" />
+        <input class="form-control form-control-navbar" type="search" placeholder="Search by Billing Id or Billing Amount ..." aria-label="Search" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" />
         <div class="input-group-append">
           <button class="btn btn-navbar"   (click)="search()">
             <i class="fas fa-search"></i>
@@ -242,4 +242,17 @@
     </div>
     <!-- /.content-wrapper -->
     </div>
+
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)"  size="medium" type="ball-spin-clockwise">  
+      <p>/</p>
+      <p style="color: white">Please Wait. </p>  
+    </ngx-spinner>  
   
+    <ngb-pagination class="d-flex justify-content-center" 
+size="lg"
+[collectionSize]="totalPageElement" 
+[pageSize]="pageSize"
+[(page)]="page" 
+[boundaryLinks]="true"
+(pageChange)="onChangePage()"
+></ngb-pagination> 

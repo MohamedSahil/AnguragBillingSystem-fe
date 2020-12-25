@@ -3,6 +3,7 @@ import { Client } from 'src/app/common/client';
 import { ClientService } from 'src/app/services/client.service';
 import { BillingService } from 'src/app/services/billing.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,23 +18,41 @@ export class DashboardComponent implements OnInit {
   public indexCounter=0;
   searchText:string="";
 
+  pageSize=2;  
+  page = 1;
+  currentPage=1;
+  totalPageElement=0;
+
   constructor(private clientService:ClientService,
               private billingService:BillingService,
+              private spinnerService: NgxSpinnerService,  
               private route:Router) { }
   
   ngOnInit(): void {
-    console.log("Ng On Init!")
-    this.getClients();
+    this.calcTotalClient();
+    this.getClients(this.page);
   }
-  getClients(){
-    this.clientService.getClients().subscribe(
+  calcTotalClient(){
+    this.clientService.calcTotalClients().subscribe(
       data=>{
-        this.clients=data;console.log(this.clients)
+        this.totalPageElement=data.row;
+        console.log(data);
+      }
+
+    );
+  }
+  getClients(tempPage:any){
+    this.spinnerService.show();
+    this.clientService.getClients(tempPage-1).subscribe(
+      data=>{
+        this.clients=data;
+        this.currentPage=tempPage;
+        this.spinnerService.hide();
       }
     );
   }
   public routeToBillingPage(client:Client){
-    console.log("hello")
+    
     this.billingService.setClientName(client.name!);
     this.billingService.setClientPhoneNumber(client.contactNumber!);
     this.billingService.setClientAddress(client.address!);
@@ -48,17 +67,21 @@ export class DashboardComponent implements OnInit {
       
       //Creating a new row 
       if(client.id=="0"){
+        this.spinnerService.show();
         this.clientService.saveClient(client).subscribe(
           data=>{
             let obj = this.clients.find(c=>c.id=="0");
             obj!.id=data.id;
+            this.spinnerService.hide();
           }
         )
       }
       else{
+        this.spinnerService.show();
         this.clientService.updateClient(client).subscribe(
           data=>{
             console.log(data);  
+            this.spinnerService.hide();
           }
         );
       }
@@ -77,24 +100,51 @@ export class DashboardComponent implements OnInit {
   }
 
   public deleteClient(client:Client){
-    this.clientService.deleteClient(client.id).subscribe(
-      data=>{
-        console.log(data)
-        const index = this.clients.indexOf(client, 0);
-        console.log(index);
-        this.clients.splice(index);
-        console.log(this.clients);
-      }
-    );
+
+    if(confirm("Are you sure to delete this Client ? ")) {
+      this.spinnerService.show();
+      this.clientService.deleteClient(client.id).subscribe(
+        data=>{
+          const index = this.clients.indexOf(client, 0);
+          this.clients.splice(index);
+          this.spinnerService.hide();
+        }
+      );
+    }
   }
 
   search(){
     console.log(this.searchText);
-    
-    this.clientService.searchClient(this.searchText).subscribe(
-      data=>this.clients=data
-    )
+    if(this.searchText==""){
+      this.page=1;
+      this.calcTotalClient();
+      this.getClients(this.page);
+    }else{
+      this.spinnerService.show();
+      this.clientService.calcTotalSearchElements(this.searchText).subscribe(
+        data=>{
+          this.totalPageElement=data.row;
+          
+        }
+      )
+      this.clientService.searchClient(this.searchText,this.page-1).subscribe(
+        data=>{
+          this.clients=data;
+          
+          this.spinnerService.hide();
+        }
+      );
+    }
 
   }
+
+  onChangePage() {
+    if(this.searchText=="")
+      this.getClients(this.page);
+    else
+      this.search();
+  }
+
+
 
 }

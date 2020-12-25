@@ -5,6 +5,7 @@ import { BillingService } from 'src/app/services/billing.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ClientService } from 'src/app/services/client.service';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-payment',
@@ -18,6 +19,7 @@ export class PaymentComponent implements OnInit {
               private paymentService:PaymentService,
               private clientService:ClientService,
               private route:ActivatedRoute,
+              private spinnerService: NgxSpinnerService, 
               private router:Router
               ) { }
 
@@ -30,6 +32,11 @@ export class PaymentComponent implements OnInit {
   paymentOption=["NEFT","Cheque","Cash","Online"]
   searchText:string="";
 
+
+  pageSize=2;  
+  page = 1;
+  currentPage=1;
+  totalPageElement=0;
 
   clientId:any=null;
   billingId:any=null;
@@ -45,25 +52,39 @@ export class PaymentComponent implements OnInit {
       this.loadData();
     }
     this.billingId=this.route.snapshot.paramMap.get('id');
-    
-    this.loadPaymentDetail(this.clientId,this.billingId);
+    this.calcTotalPayment();
+    this.loadPaymentDetail(this.clientId,this.billingId,this.page);
   }
 
+  calcTotalPayment(){
+    this.paymentService.calcTotalPayment(this.billingId).subscribe(
+      data=>{
+        console.log(data.row);
+        this.totalPageElement=data.row;
+        console.log("total element : " + this.totalPageElement);
+      }
+    )
+  }
   loadData(){
+    this.spinnerService.show();
     this.clientService.getClient(this.clientId).subscribe(
       data=>{
         this.name=data.name!;
         this.contactNumber=data.contactNumber!;
         this.address=data.address!;
+        this.spinnerService.hide();
       }
     );
   }
 
-  loadPaymentDetail(clientId:any,billingId:any){
-    this.paymentService.getPaymentList(clientId,billingId).subscribe(
+  loadPaymentDetail(clientId:any,billingId:any,page:any){
+    this.spinnerService.show();
+    this.paymentService.getPaymentList(clientId,billingId,this.page-1).subscribe(
       data=>{
         this.paymentDetails=data
-        console.log(data)
+     
+        this.currentPage=this.page;
+        this.spinnerService.hide();
       }
     );
   }
@@ -89,10 +110,13 @@ export class PaymentComponent implements OnInit {
         paymentDetail.clientId=this.clientId;
         paymentDetail.paymentDate=payDate;
 
+        this.spinnerService.show();
         this.paymentService.savePaymentDetail(paymentDetail).subscribe(
           data=>{
             let obj = this.paymentDetails.find(c=>c.paymentDetailId=="0");
+            console.log(obj);
             obj!.paymentDetailId=data.paymentDetailId;
+            this.spinnerService.hide();
           }
         )
         this.currentId="-1";
@@ -100,29 +124,56 @@ export class PaymentComponent implements OnInit {
       //Updating  a payment
         console.log(paymentDetail);
         paymentDetail.paymentDate=payDate;
+        this.spinnerService.show();
         this.paymentService.updatePaymentDetail(paymentDetail).subscribe(
-          (data)=>{console.log(data)}
+          (data)=>{
+            console.log(data)
+            this.spinnerService.hide();
+          }
         );
         this.currentId="-1";
 
       }
     }
   }
-  deleteBill(paymentDetail:Payment){
-
+  deletePaymentDetail(paymentDetail:Payment){
+    if(confirm("Are you sure to delete this bill ? ")) {
+      this.spinnerService.show();
+      this.paymentService.deletePaymentDetail(paymentDetail.paymentDetailId).subscribe(
+        data=>{
+          const index = this.paymentDetails.indexOf(paymentDetail, 0);
+          this.paymentDetails.splice(index);
+          console.log(this.paymentDetails);
+          this.spinnerService.hide();
+        }
+      )
+    }
   }
 
   search(){
     if(this.searchText==""){
-      this.loadPaymentDetail(this.clientId,this.billingId);
+      this.calcTotalPayment();
+      this.loadPaymentDetail(this.clientId,this.billingId,this.page);
     }
     else{
-      this.paymentService.searchPaymentDetail(this.searchText).subscribe(
-        data=>{this.paymentDetails=data
+      this.spinnerService.show();
+      this.paymentService.calcTotalSearchPayment(this.searchText,this.billingId).subscribe(
+        data=>{
+          this.totalPageElement=data.row
+        }
+      );
+      this.paymentService.searchPaymentDetail(this.searchText,this.billingId,this.page-1).subscribe(
+        data=>{
+          this.paymentDetails=data;
+          this.spinnerService.hide();
         }
       );
     }
-   
   }
-
+  onChangePage() {
+    if(this.searchText=="")
+      this.loadPaymentDetail(this.clientId,this.billingId,this.page-1);
+    else
+      this.search();  
+  }
 }

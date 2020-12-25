@@ -12,6 +12,9 @@ import { BillingComponent } from './components/billing/billing.component';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentComponent } from './components/payment/payment.component';
+import {NgxSpinnerModule } from 'ngx-spinner'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 
@@ -37,7 +40,10 @@ const routes : Routes = [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
+    NgbModule 
   ],
   providers: [ClientService],
   bootstrap: [AppComponent]

@@ -12,7 +12,9 @@ export class BillingService {
   saveBillUrl="http://localhost:8080/updateBillingDetail";
   createBillUrl="http://localhost:8080/addBillingDetail";
   searchBillUrl="http://localhost:8080/searchBills"
-  
+  deleteBillUrl="http://localhost:8080/deleteBill"
+  totalBillsUrl="http://localhost:8080/totalBills"
+  totalSearchBillingIdUrl="http://localhost:8080/totalSearchBills"
   
   
   private clientName=""
@@ -24,8 +26,8 @@ export class BillingService {
 
   
 
-  getBillingList(id:number){
-    return this.httpClient.get<Billing[]>(this.listBillsUrl+"/"+id);
+  getBillingList(id:number,page:any){
+    return this.httpClient.get<Billing[]>(this.listBillsUrl+"/"+id+"?page="+page);
   }
 
   createBill(billingDto:BillingDto){
@@ -34,10 +36,19 @@ export class BillingService {
   saveBillingList(billingDto:BillingDto){
     return this.httpClient.post<Billing>(this.saveBillUrl,billingDto);
   }
-  searchBills(query:any){
-    return this.httpClient.get<Billing[]>(this.searchBillUrl+"?query="+query);
+  searchBills(clientId:any,query:any,page:any){
+    return this.httpClient.get<Billing[]>(this.searchBillUrl+"/"+clientId+"?query="+query+"&page="+page);
+  }
+  deleteBill(id:any){
+    return this.httpClient.delete<any>(this.deleteBillUrl+"/"+id);
+  }
+  calcTotalBill(clientId:any){
+    return this.httpClient.get<any>(this.totalBillsUrl+"/"+clientId);
   }
 
+  calcTotalSearchElements(clientId:any,param:any){
+    return this.httpClient.get<any>(this.totalSearchBillingIdUrl+"/"+clientId+"?query="+param);
+  }
 
   setClientName(name:string){
     this.clientName=name;
@@ -66,5 +77,6 @@ export class BillingService {
     return this.clientId;
   }
 
+ 
 
 }

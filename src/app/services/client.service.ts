@@ -16,6 +16,9 @@ export class ClientService {
 
   findClient="http://localhost:8080/getClient";
   searchClientUrl="http://localhost:8080/searchClient";
+  totalClientsUrl="http://localhost:8080/totalClients"
+
+  totalSearchClientUrl="http://localhost:8080/totalSearchClients";
 
 
   constructor(private httpClient:HttpClient) { 
@@ -27,9 +30,9 @@ export class ClientService {
 
   }
 
-  getClients(): Observable<Client[]> {
+  getClients(page:any): Observable<Client[]> {
     // need to build URL based on product id
-    return this.httpClient.get<any>(this.baseUrl);
+    return this.httpClient.get<any>(this.baseUrl+"?page="+page);
   }
 
   saveClient(client:Client): Observable<Client> {
@@ -44,8 +47,17 @@ export class ClientService {
   deleteClient(id:any){
     return this.httpClient.delete<any>(this.delClient+id);
   }
-  searchClient(param:any){
-    return this.httpClient.get<any>(this.searchClientUrl+ '?q='+param);
+  searchClient(param:any,page:any){
+    console.log("param : "+param);
+    return this.httpClient.get<any>(this.searchClientUrl+ "?q="+param+"&page="+page);
+  }
+  
+  calcTotalClients(){
+    return this.httpClient.get<any>(this.totalClientsUrl);
+  }
+
+  calcTotalSearchElements(param:any){
+    return this.httpClient.get<any>(this.totalSearchClientUrl+"?q="+param);
   }
 
 

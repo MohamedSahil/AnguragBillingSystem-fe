@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
@@ -24,10 +25,12 @@
     "admin-lte": "^3.0.5",
     "angular-bootstrap-datetimepicker": "^4.0.2",
     "bootstrap": "^4.5.3",
+    "jw-angular-pagination": "^1.2.0",
     "moment": "^2.29.1",
     "ng2-date-picker": "^11.0.0",
     "ng2-datepicker": "^3.1.1",
     "ngx-bootstrap": "^6.2.0",
+    "ngx-spinner": "^10.0.1",
     "open-iconic": "^1.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
