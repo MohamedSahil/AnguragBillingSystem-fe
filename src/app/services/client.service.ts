@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Client } from '../common/client';
+import { Register } from '../common/register';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,13 @@ export class ClientService {
   totalClientsUrl="http://localhost:8080/totalClients"
 
   totalSearchClientUrl="http://localhost:8080/totalSearchClients";
+  registerUserUrl="http://localhost:8080/addUser";
+
+  forgetPasswordUrl="http://localhost:8080/forgot"
+  //localhost:8080/forgot?email=mdsahil
+
+  changePasswordUrl="http://localhost:8080/reset"
+
 
 
   constructor(private httpClient:HttpClient) { 
@@ -60,6 +68,20 @@ export class ClientService {
     return this.httpClient.get<any>(this.totalSearchClientUrl+"?q="+param);
   }
 
+  
+  registerUser(user:Register): Observable<Register>{
+    return this.httpClient.post<Register>(this.registerUserUrl,user);
+  }
+
+  forgetPassword(email:any):Observable<any>{
+    console.log("email:"+email);
+    return this.httpClient.post<any>(this.forgetPasswordUrl+"?email="+email,"");
+  }
+
+  changePassword(token:any,password:any){
+    console.log("Password : "+password);
+    return this.httpClient.post<any>(this.changePasswordUrl+"?token="+token+"&password="+password,"");
+  }
 
 }
 

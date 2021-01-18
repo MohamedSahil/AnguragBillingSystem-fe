@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/common/client';
+import { Register } from 'src/app/common/register';
 import { ClientService } from 'src/app/services/client.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { BillingService } from 'src/app/services/billing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from 'src/app/services/notification.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,10 +26,15 @@ export class DashboardComponent implements OnInit {
   page = 1;
   currentPage=1;
   totalPageElement=0;
+  
+  registerUser=new Register();
 
   constructor(private clientService:ClientService,
               private billingService:BillingService,
-              private spinnerService: NgxSpinnerService,  
+              private spinnerService: NgxSpinnerService, 
+              private notificationService:NotificationService,
+              private modalService: NgbModal,
+              private authService:AuthService,
               private route:Router) { }
   
   ngOnInit(): void {
@@ -42,14 +51,23 @@ export class DashboardComponent implements OnInit {
     );
   }
   getClients(tempPage:any){
-    this.spinnerService.show();
+    
+    
+    
+    this.spinnerService.show(); 
+   
     this.clientService.getClients(tempPage-1).subscribe(
       data=>{
         this.clients=data;
         this.currentPage=tempPage;
         this.spinnerService.hide();
+      },
+      ()=>{
+          this.notificationService.showError("Failed to Load Data");
+          this.spinnerService.hide();        
       }
     );
+    
   }
   public routeToBillingPage(client:Client){
     
@@ -73,6 +91,10 @@ export class DashboardComponent implements OnInit {
             let obj = this.clients.find(c=>c.id=="0");
             obj!.id=data.id;
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Saved Successfully");
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Save !!!");
           }
         )
       }
@@ -82,6 +104,10 @@ export class DashboardComponent implements OnInit {
           data=>{
             console.log(data);  
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Updated Successfully")
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Upate!!!");
           }
         );
       }
@@ -108,6 +134,10 @@ export class DashboardComponent implements OnInit {
           const index = this.clients.indexOf(client, 0);
           this.clients.splice(index);
           this.spinnerService.hide();
+          this.notificationService.showSuccess("Deleted Successfully.")
+        },
+        ()=>{
+          this.notificationService.showError("Failed to Delete!!!");
         }
       );
     }
@@ -120,18 +150,22 @@ export class DashboardComponent implements OnInit {
       this.calcTotalClient();
       this.getClients(this.page);
     }else{
-      this.spinnerService.show();
+
       this.clientService.calcTotalSearchElements(this.searchText).subscribe(
         data=>{
           this.totalPageElement=data.row;
-          
         }
       )
+      this.spinnerService.show();
       this.clientService.searchClient(this.searchText,this.page-1).subscribe(
+        
         data=>{
           this.clients=data;
-          
           this.spinnerService.hide();
+        },
+        ()=>{
+          this.notificationService.showError("Failed to Load Data");
+          this.spinnerService.hide();        
         }
       );
     }
@@ -145,6 +179,31 @@ export class DashboardComponent implements OnInit {
       this.search();
   }
 
+  openScrollableContent(longContent:any) {
+    this.modalService.open(longContent, { scrollable: true, size: 'lg' });
+  }
 
+  register(longContent:any){
+    this.spinnerService.show();
+      this.clientService.registerUser(this.registerUser).subscribe(
+        data=>{
+          console.log(data);
+          this.spinnerService.hide();
+          this.notificationService.showSuccess("Registered User Successfully.")
+          this.modalService.dismissAll(longContent);
+        },
+        ()=>{
+          this.notificationService.showError("Failed to register");
+          this.spinnerService.hide();
+          this.modalService.dismissAll(longContent);
+        }
+      )
+  }
+  logout(){
+    
+   this.authService.logout();
+   this.notificationService.showSuccess("Logged Out Successfully ")
+   this.route.navigate(['/login'])
+  }
 
 }

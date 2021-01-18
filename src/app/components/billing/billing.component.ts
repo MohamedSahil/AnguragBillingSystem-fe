@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IDayCalendarConfig } from 'ng2-date-picker';
-import {NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct, NgbCalendar, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import {BillingService} from 'src/app/services/billing.service';
 import { Billing } from 'src/app/common/billing';
@@ -8,6 +8,9 @@ import { BillingDto } from 'src/app/dto/billing-dto';
 import { DatePipe } from '@angular/common';
 import {ClientService} from 'src/app/services/client.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from 'src/app/services/notification.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Register } from 'src/app/common/register';
 //import {DatepickerOptions,DateModel} from 'ng2-datepicker';
 
 @Component({
@@ -34,7 +37,7 @@ export class BillingComponent implements OnInit {
   currentPage=1;
   totalPageElement=0;
 
-
+  registerUser=new Register();
 
   ngOnInit(){
 
@@ -56,6 +59,9 @@ export class BillingComponent implements OnInit {
               private billingService:BillingService,
               private clientService:ClientService,
               private spinnerService: NgxSpinnerService,  
+              private notificationService:NotificationService,
+              private modalService: NgbModal,
+              private authService:AuthService,
               private router:Router) 
               {}
 
@@ -82,6 +88,10 @@ export class BillingComponent implements OnInit {
           const index = this.billingDetails.indexOf(billingDetail, 0);
           this.billingDetails.splice(index);
           this.spinnerService.hide();
+          this.notificationService.showSuccess("Deleted Successfully.")
+        },
+        (err)=>{
+          this.notificationService.showError("Failed to Delete!!!");
         }
       );
     }else{
@@ -112,7 +122,7 @@ export class BillingComponent implements OnInit {
   
   public test(billingDetail:Billing, buttonParam:string){
     this.flag=!this.flag;
-    console.log(billingDetail);
+
     const billingDate:string = new DatePipe('en-US').transform(billingDetail.billingDate, 'MM-dd-yyyy')!
 
     if(buttonParam=="1"){
@@ -122,9 +132,6 @@ export class BillingComponent implements OnInit {
   
       billingDto.billingAmount=billingDetail.billingAmount;
       billingDto.billingDate=billingDate;
-
-      console.log("DTO")
-      console.log(billingDto);
       //Fow newly created row 
       if(billingDetail.billingId=="0"){
         let tempId=this.route.snapshot.paramMap.get('id');
@@ -137,6 +144,10 @@ export class BillingComponent implements OnInit {
             obj!.billingId=data.billingId;
             //window.location.reload();
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Saved Successfully");
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Save !!!");
           }
         );
       }else{
@@ -146,6 +157,10 @@ export class BillingComponent implements OnInit {
           data=>{
             console.log(data);
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Updated Successfully")
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Upate!!!");
           }
         );
       }
@@ -203,5 +218,32 @@ export class BillingComponent implements OnInit {
       this.showBillingList();
     else
       this.search();
+  }
+
+  openScrollableContent(longContent:any) {
+    this.modalService.open(longContent, { scrollable: true, size: 'lg' });
+  }
+
+  register(longContent:any){
+    this.spinnerService.show();
+      this.clientService.registerUser(this.registerUser).subscribe(
+        data=>{
+          console.log(data);
+          this.spinnerService.hide();
+          this.notificationService.showSuccess("Registered User Successfully.")
+          this.modalService.dismissAll(longContent);
+        },
+        ()=>{
+          this.notificationService.showError("Failed to register");
+          this.spinnerService.hide();
+          this.modalService.dismissAll(longContent);
+        }
+      )
+  }
+  logout(){
+    
+   this.authService.logout();
+   this.notificationService.showSuccess("Logged Out Successfully ")
+  this.router.navigate(['/login'])
   }
 }

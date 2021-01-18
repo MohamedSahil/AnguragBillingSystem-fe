@@ -14,16 +14,28 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentComponent } from './components/payment/payment.component';
 import {NgxSpinnerModule } from 'ngx-spinner'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { AuthGuard } from './guard/auth-guard';
+import { AuthService } from './services/auth.service';
+import { TokenInterceptorService } from './services/token-interceptor.service';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
+import { UpdateUserPasswordComponent } from './components/update-user-password/update-user-password.component';
 
 
 
 
 const routes : Routes = [
   {path:'login',component:LoginComponent},
-  {path:'dashboard',component:DashboardComponent},
-  {path:'billing-detail/:id',component:BillingComponent},
-  {path:'payment-detail/:cId/:id',component:PaymentComponent},
-  {path:'',redirectTo:'dashboard',pathMatch:'full'}
+  {path:'dashboard',component:DashboardComponent,canActivate:[AuthGuard]},
+  {path:'billing-detail/:id',component:BillingComponent,canActivate:[AuthGuard]},
+  {path:'payment-detail/:cId/:id',component:PaymentComponent,canActivate:[AuthGuard]},
+  {path:'forgetPassword',component:ForgetPasswordComponent},
+  {path:'reset',component:ChangePasswordComponent},
+  {path:'updateProfile',component:UpdateProfileComponent},
+  {path:'',redirectTo:'/dashboard',pathMatch:'full'},
+  {path:'**',redirectTo:'/products',pathMatch:'full'}
 ]
 
 @NgModule({
@@ -32,7 +44,11 @@ const routes : Routes = [
     LoginComponent,
     DashboardComponent,
     BillingComponent,
-    PaymentComponent
+    PaymentComponent,
+    ForgetPasswordComponent,
+    ChangePasswordComponent,
+    UpdateProfileComponent,
+    UpdateUserPasswordComponent
   ],
   imports: [
     FormsModule,
@@ -43,9 +59,19 @@ const routes : Routes = [
     NgbModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    NgbModule 
+    NgbModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    })
+ 
   ],
-  providers: [ClientService],
+  providers: [AuthService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

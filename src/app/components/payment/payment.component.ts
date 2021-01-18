@@ -6,6 +6,10 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { ClientService } from 'src/app/services/client.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Register } from 'src/app/common/register';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-payment',
@@ -20,9 +24,13 @@ export class PaymentComponent implements OnInit {
               private clientService:ClientService,
               private route:ActivatedRoute,
               private spinnerService: NgxSpinnerService, 
+              private notificationService:NotificationService,
+              private modalService: NgbModal,
+              private authService:AuthService,
               private router:Router
               ) { }
 
+  registerUser=new Register();              
   paymentDetails:Payment[]=[];
   currentId:string="";
   name:string="";
@@ -117,6 +125,10 @@ export class PaymentComponent implements OnInit {
             console.log(obj);
             obj!.paymentDetailId=data.paymentDetailId;
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Saved Successfully");
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Save !!!");
           }
         )
         this.currentId="-1";
@@ -129,6 +141,10 @@ export class PaymentComponent implements OnInit {
           (data)=>{
             console.log(data)
             this.spinnerService.hide();
+            this.notificationService.showSuccess("Data Updated Successfully");
+          },
+          (err)=>{
+            this.notificationService.showError("Failed to Update !!!");
           }
         );
         this.currentId="-1";
@@ -145,6 +161,10 @@ export class PaymentComponent implements OnInit {
           this.paymentDetails.splice(index);
           console.log(this.paymentDetails);
           this.spinnerService.hide();
+          this.notificationService.showSuccess("Deleted Successfully.")
+        },
+        ()=>{
+          this.notificationService.showError("Failed to Delete!!!");
         }
       )
     }
@@ -175,5 +195,31 @@ export class PaymentComponent implements OnInit {
       this.loadPaymentDetail(this.clientId,this.billingId,this.page-1);
     else
       this.search();  
+  }
+  openScrollableContent(longContent:any) {
+    this.modalService.open(longContent, { scrollable: true, size: 'lg' });
+  }
+
+  register(longContent:any){
+    this.spinnerService.show();
+      this.clientService.registerUser(this.registerUser).subscribe(
+        data=>{
+          console.log(data);
+          this.spinnerService.hide();
+          this.notificationService.showSuccess("Registered User Successfully.")
+          this.modalService.dismissAll(longContent);
+        },
+        ()=>{
+          this.notificationService.showError("Failed to register");
+          this.spinnerService.hide();
+          this.modalService.dismissAll(longContent);
+        }
+      )
+  }
+  logout(){
+    
+   this.authService.logout();
+   this.notificationService.showSuccess("Logged Out Successfully ")
+  this.router.navigate(['/login'])
   }
 }

@@ -26,101 +26,68 @@
         </div>
       </div>
     </form>
-
-    <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="assets/images/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="assets/images/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="assets/images/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
+      <!-- <li class="nav-item">
+        <button style ="background-color: #555555; color:white;" class="btn  mb-2 mr-2 nav-link" (click)="openScrollableContent(longContent)">Create User</button>
+      </li> -->
       <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-            class="fas fa-th-large"></i></a>
-      </li>
+        <a class="nav-link"  data-widget="control-sidebar" data-slide="true" href="#" style="color: black;" (click)="logout()"> 
+          <i title="Logout" class="fa fa-power-off" aria-hidden="true" style="font-size: 26px;"></i>
+        </a>
+     
+     </li>
     </ul>
+   
   </nav>
   <!-- /.navbar -->
+
+
+  
+   <!-- Main Sidebar Container -->
+   <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a class="brand-link"> 
+    <span class="brand-text font-weight-light">Anurag Application</span>
+    </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+      
+        <li class="nav-header">USER MODULE</li>
+       
+        
+        <li class="nav-item">
+          <a  class="nav-link" (click)="openScrollableContent(longContent)">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Create User
+              <!-- <i class="fas fa-angle-left right"></i> -->
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/updateProfile" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Update Profile                
+              <!-- <i class="fas fa-angle-left right"></i> -->
+            </p>
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+
 
   <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -129,7 +96,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Name : {{name}}</h1>
+              <h1 class="m-0 text-dark">Client Name : {{name}}</h1>
               <h5>Number : {{contactNumber}}</h5>
               <h5>Address : {{address}}</h5>
             </div><!-- /.col -->
@@ -256,3 +223,51 @@ size="lg"
 [boundaryLinks]="true"
 (pageChange)="onChangePage()"
 ></ngb-pagination> 
+
+
+
+<ng-template #longContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Register User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card-body">
+      <form class="form">
+        <div class="form-group">
+          <label for="uname1">Email Address </label>
+          <input type="text" class="form-control rounded-0" [(ngModel)]="registerUser.username" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control rounded-0" [(ngModel)]="registerUser.password" name="password" required>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control rounded-0" [(ngModel)]="registerUser.confirmPassword" name="password" required>
+        </div>
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-control rounded-0" [(ngModel)]="registerUser.name" name="password" required>
+        </div>
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="text" class="form-control rounded-0" [(ngModel)]="registerUser.phoneNumber" name="password" required>
+        </div>
+         <div class="form-group">
+          <label>Address</label>
+          <input type="text" class="form-control rounded-0" [(ngModel)]="registerUser.address" name="password" required>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="register(longContent)" >Register</button>
+    <button type="button" class="btn " (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
