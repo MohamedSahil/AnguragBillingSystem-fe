@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   public indexCounter=0;
   searchText:string="";
 
-  pageSize=2;  
+  pageSize=10;  
   page = 1;
   currentPage=1;
   totalPageElement=0;
@@ -95,6 +95,8 @@ export class DashboardComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Save !!!");
+            this.spinnerService.hide();
+
           }
         )
       }
@@ -108,6 +110,8 @@ export class DashboardComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Upate!!!");
+            this.spinnerService.hide();
+
           }
         );
       }
@@ -131,13 +135,15 @@ export class DashboardComponent implements OnInit {
       this.spinnerService.show();
       this.clientService.deleteClient(client.id).subscribe(
         data=>{
-          const index = this.clients.indexOf(client, 0);
-          this.clients.splice(index);
+          const index = this.clients.indexOf(client);
+          this.clients.splice(index,1);
           this.spinnerService.hide();
           this.notificationService.showSuccess("Deleted Successfully.")
         },
         ()=>{
           this.notificationService.showError("Failed to Delete!!!");
+          this.spinnerService.hide();
+
         }
       );
     }

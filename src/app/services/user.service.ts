@@ -8,8 +8,12 @@ import { Register } from '../common/register';
 })
 export class UserService {
 
-  updateProfileUrl="http://localhost:8080/updateProfile"
-  fetchUserDetailUrl="http://localhost:8080/fetchUserDetails"
+  ROOT_URL:String="http://anuragecom.us-east-1.elasticbeanstalk.com"
+
+
+  updateProfileUrl=this.ROOT_URL+"/updateProfile"
+  updatePasswordUrl=this.ROOT_URL+"/updatePassword"
+  fetchUserDetailUrl=this.ROOT_URL+"/fetchUserDetails"
 
   constructor(private httpClient:HttpClient) { }
 
@@ -19,4 +23,9 @@ export class UserService {
   fetchUserDetails(): Observable<Register>{
     return this.httpClient.get<any>(this.fetchUserDetailUrl);
   }
+
+  updatePassword(password:String): Observable<any>{
+      return this.httpClient.post<any>(this.updatePasswordUrl+"?password="+password,"");
+  }
+
 }

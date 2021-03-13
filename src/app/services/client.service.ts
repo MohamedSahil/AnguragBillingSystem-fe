@@ -10,22 +10,25 @@ import { Register } from '../common/register';
 })
 export class ClientService {
 
-  private baseUrl = 'http://localhost:8080/listClients';
-  private addClient='http://localhost:8080/saveClient';
-  private modifyClient='http://localhost:8080/updateClient';
-  private delClient='http://localhost:8080/deleteClient/'
 
-  findClient="http://localhost:8080/getClient";
-  searchClientUrl="http://localhost:8080/searchClient";
-  totalClientsUrl="http://localhost:8080/totalClients"
+  ROOT_URL:String="http://anuragecom.us-east-1.elasticbeanstalk.com"
 
-  totalSearchClientUrl="http://localhost:8080/totalSearchClients";
-  registerUserUrl="http://localhost:8080/addUser";
+  private baseUrl = this.ROOT_URL+'/listClients';
+  private addClient=this.ROOT_URL+'/saveClient';
+  private modifyClient=this.ROOT_URL+'/updateClient';
+  private delClient=this.ROOT_URL+'/deleteClient/';
 
-  forgetPasswordUrl="http://localhost:8080/forgot"
+  findClient=this.ROOT_URL+"/getClient";
+  searchClientUrl=this.ROOT_URL+"/searchClient";
+  totalClientsUrl=this.ROOT_URL+"/totalClients"
+
+  totalSearchClientUrl=this.ROOT_URL+"/totalSearchClients";
+  registerUserUrl=this.ROOT_URL+"/addUser";
+
+  forgetPasswordUrl="this.ROOT_URL+/forgot"
   //localhost:8080/forgot?email=mdsahil
 
-  changePasswordUrl="http://localhost:8080/reset"
+  changePasswordUrl="this.ROOT_URL+/reset"
 
 
 

@@ -32,7 +32,7 @@ export class BillingComponent implements OnInit {
   searchText:string="";
   clientId:any=null;
 
-  pageSize=2;  
+  pageSize=10;  
   page = 1;
   currentPage=1;
   totalPageElement=0;
@@ -73,6 +73,8 @@ export class BillingComponent implements OnInit {
         this.contactNumber=data.contactNumber!;
         this.address=data.address!;
         this.spinnerService.hide();
+      },()=>{
+        this.spinnerService.hide();
       }
     );
 
@@ -85,13 +87,16 @@ export class BillingComponent implements OnInit {
       this.spinnerService.show();
       this.billingService.deleteBill(billingDetail.billingId).subscribe(
         () => {
-          const index = this.billingDetails.indexOf(billingDetail, 0);
-          this.billingDetails.splice(index);
+          const index = this.billingDetails.indexOf(billingDetail);
+          this.billingDetails.splice(index,1);
           this.spinnerService.hide();
           this.notificationService.showSuccess("Deleted Successfully.")
         },
         (err)=>{
           this.notificationService.showError("Failed to Delete!!!");
+          this.spinnerService.hide();
+
+          
         }
       );
     }else{
@@ -115,6 +120,8 @@ export class BillingComponent implements OnInit {
         this.billingDetails=data;
         //console.log(this.billingDetails);
         this.spinnerService.hide(); 
+      },err=>{
+        this.spinnerService.hide();
       }  
     );
   }
@@ -148,6 +155,7 @@ export class BillingComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Save !!!");
+            this.spinnerService.hide();
           }
         );
       }else{
@@ -161,6 +169,7 @@ export class BillingComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Upate!!!");
+            this.spinnerService.hide();
           }
         );
       }
@@ -168,6 +177,7 @@ export class BillingComponent implements OnInit {
     } else{
       this.showUpdatedMsg=false;
       this.currentId=billingDetail.billingId!;
+      this.spinnerService.hide();
     }
 
     console.log(billingDetail);
@@ -201,12 +211,21 @@ export class BillingComponent implements OnInit {
     else{
       this.spinnerService.show();
       this.billingService.calcTotalSearchElements(this.clientId,this.searchText).subscribe(
-        data=>this.totalPageElement=data.row
+        data=>{
+          this.totalPageElement=data.row
+          this.spinnerService.hide();
+        },
+        err=>{
+          this.spinnerService.hide();
+
+        }
       )
 
       this.billingService.searchBills(this.clientId,this.searchText,this.page-1).subscribe(
         data=>{
           this.billingDetails=data
+          this.spinnerService.hide();
+        },err=>{
           this.spinnerService.hide();
         }
       );

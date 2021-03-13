@@ -41,7 +41,7 @@ export class PaymentComponent implements OnInit {
   searchText:string="";
 
 
-  pageSize=2;  
+  pageSize=10;  
   page = 1;
   currentPage=1;
   totalPageElement=0;
@@ -81,6 +81,8 @@ export class PaymentComponent implements OnInit {
         this.contactNumber=data.contactNumber!;
         this.address=data.address!;
         this.spinnerService.hide();
+      },err =>{
+        this.spinnerService.hide();
       }
     );
   }
@@ -92,6 +94,8 @@ export class PaymentComponent implements OnInit {
         this.paymentDetails=data
      
         this.currentPage=this.page;
+        this.spinnerService.hide();
+      },err=>{
         this.spinnerService.hide();
       }
     );
@@ -129,6 +133,7 @@ export class PaymentComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Save !!!");
+            this.spinnerService.hide();
           }
         )
         this.currentId="-1";
@@ -145,6 +150,7 @@ export class PaymentComponent implements OnInit {
           },
           (err)=>{
             this.notificationService.showError("Failed to Update !!!");
+            this.spinnerService.hide();
           }
         );
         this.currentId="-1";
@@ -157,14 +163,15 @@ export class PaymentComponent implements OnInit {
       this.spinnerService.show();
       this.paymentService.deletePaymentDetail(paymentDetail.paymentDetailId).subscribe(
         data=>{
-          const index = this.paymentDetails.indexOf(paymentDetail, 0);
-          this.paymentDetails.splice(index);
+          const index = this.paymentDetails.indexOf(paymentDetail);
+          this.paymentDetails.splice(index,1);
           console.log(this.paymentDetails);
           this.spinnerService.hide();
           this.notificationService.showSuccess("Deleted Successfully.")
         },
         ()=>{
           this.notificationService.showError("Failed to Delete!!!");
+          this.spinnerService.hide();
         }
       )
     }
@@ -180,6 +187,8 @@ export class PaymentComponent implements OnInit {
       this.paymentService.calcTotalSearchPayment(this.searchText,this.billingId).subscribe(
         data=>{
           this.totalPageElement=data.row
+        },err=>{
+          this.spinnerService.hide();
         }
       );
       this.paymentService.searchPaymentDetail(this.searchText,this.billingId,this.page-1).subscribe(

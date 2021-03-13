@@ -34,6 +34,7 @@ const routes : Routes = [
   {path:'forgetPassword',component:ForgetPasswordComponent},
   {path:'reset',component:ChangePasswordComponent},
   {path:'updateProfile',component:UpdateProfileComponent},
+  {path:'updatePassword',component:UpdateUserPasswordComponent},
   {path:'',redirectTo:'/dashboard',pathMatch:'full'},
   {path:'**',redirectTo:'/products',pathMatch:'full'}
 ]

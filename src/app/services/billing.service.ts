@@ -8,18 +8,21 @@ import {BillingDto} from '../dto/billing-dto'
 })
 export class BillingService {
 
-  listBillsUrl="http://localhost:8080/listBillingDetail";
-  saveBillUrl="http://localhost:8080/updateBillingDetail";
-  createBillUrl="http://localhost:8080/addBillingDetail";
-  searchBillUrl="http://localhost:8080/searchBills"
-  deleteBillUrl="http://localhost:8080/deleteBill"
-  totalBillsUrl="http://localhost:8080/totalBills"
-  totalSearchBillingIdUrl="http://localhost:8080/totalSearchBills"
+  ROOT_URL:String="http://anuragecom.us-east-1.elasticbeanstalk.com"
+
+  listBillsUrl=this.ROOT_URL+"/listBillingDetail";
+  saveBillUrl=this.ROOT_URL+"/updateBillingDetail";
+  createBillUrl=this.ROOT_URL+"/addBillingDetail";
+  searchBillUrl=this.ROOT_URL+"/searchBills"
+  deleteBillUrl=this.ROOT_URL+"/deleteBill"
+  totalBillsUrl=this.ROOT_URL+"/totalBills"
+  totalSearchBillingIdUrl=this.ROOT_URL+"/totalSearchBills"
   
   
   private clientName=""
   private clientPhoneNumber=""
   private clientAddress=""
+
   private clientId=""
 
   constructor(private httpClient:HttpClient) { }

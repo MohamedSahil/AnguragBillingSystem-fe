@@ -30,6 +30,7 @@ export class ForgetPasswordComponent implements OnInit {
           
         }else{
           this.notificationService.showError("Failed to Send email. Enter Correct Email Address!");
+          this.spinnerService.hide();
            
         }
         this.spinnerService.hide(); 

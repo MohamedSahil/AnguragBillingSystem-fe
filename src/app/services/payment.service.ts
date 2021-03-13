@@ -9,14 +9,17 @@ import { PaymentDto } from '../dto/payment-dto';
 })
 export class PaymentService {
 
-  private listPaymentUrl= "http://localhost:8080/listPaymentDetails/"
-  private addPaymentUrl= "http://localhost:8080/addPaymentDetail"
-  private updatePaymentUrl= "http://localhost:8080/updatePaymentDetail"
-  private deletePaymentUrl= "http://localhost:8080/deletePayment/"
+  ROOT_URL:String="http://anuragecom.us-east-1.elasticbeanstalk.com"
+
+
+  private listPaymentUrl= this.ROOT_URL+"/listPaymentDetails/"
+  private addPaymentUrl= this.ROOT_URL+"/addPaymentDetail"
+  private updatePaymentUrl= this.ROOT_URL+"/updatePaymentDetail"
+  private deletePaymentUrl= this.ROOT_URL+"/deletePayment/"
   
-  private searchPaymentsUrl = "http://localhost:8080/searchPayments"
-  private totalPaymentsUrl = "http://localhost:8080/totalPayments"
-  private totalSearchPaymentsUrl = "http://localhost:8080/totalSearchPayments"
+  private searchPaymentsUrl = this.ROOT_URL+"/searchPayments"
+  private totalPaymentsUrl = this.ROOT_URL+"/totalPayments"
+  private totalSearchPaymentsUrl = this.ROOT_URL+"/totalSearchPayments"
 
 
   constructor(private httpClient:HttpClient) { }
